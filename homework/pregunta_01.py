@@ -5,6 +5,9 @@
 Escriba el codigo que ejecute la accion solicitada en cada pregunta.
 """
 
+import os
+import zipfile
+import pandas as pd
 
 def pregunta_01():
     """
@@ -71,3 +74,19 @@ def pregunta_01():
 
 
     """
+
+
+def descomprimir_archivo():
+    """
+    Descomprime el archivo "input.zip" en la carpeta "input" ubicada en la raíz.
+    """
+    zip = "files/input.zip"
+    extraccion = "input"
+    
+    if not os.path.exists(extraccion):
+        os.makedirs(extraccion)
+    
+    with zipfile.ZipFile(zip, 'r') as zip_ref:
+        zip_ref.extractall(extraccion)
+
+pregunta_01()
