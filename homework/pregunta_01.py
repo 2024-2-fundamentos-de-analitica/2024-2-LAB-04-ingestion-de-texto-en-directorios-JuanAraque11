@@ -75,18 +75,33 @@ def pregunta_01():
 
     """
 
+    # Leer el archivo zip
+    with zipfile.ZipFile("files/input.zip", "r") as zip_ref:
+        zip_ref.extractall("files")
 
-def descomprimir_archivo():
-    """
-    Descomprime el archivo "input.zip" en la carpeta "input" ubicada en la raíz.
-    """
-    zip = "files/input.zip"
-    extraccion = "input"
-    
-    if not os.path.exists(extraccion):
-        os.makedirs(extraccion)
-    
-    with zipfile.ZipFile(zip, 'r') as zip_ref:
-        zip_ref.extractall(extraccion)
+    # Crear para test
+    test = []
+    for folder in ["test"]:
+        for sentiment in ["negative", "positive", "neutral"]:
+            for file in os.listdir(f"files/input/{folder}/{sentiment}"):
+                with open(f"files/input/{folder}/{sentiment}/{file}", "r") as f:
+                    test.append({"phrase": f.read(), "target": sentiment})
+
+    # Crear para train
+    train = []
+    for folder in ["train"]:
+        for sentiment in ["negative", "positive", "neutral"]:
+            for file in os.listdir(f"files/input/{folder}/{sentiment}"):
+                with open(f"files/input/{folder}/{sentiment}/{file}", "r") as f:
+                    train.append({"phrase": f.read(), "target": sentiment})
+
+    # Crear dataframes
+    df_test = pd.DataFrame(test)
+    df_train = pd.DataFrame(train)
+
+    # Crear carpeta de output
+    os.makedirs("files/output", exist_ok=True)
+    df_train.to_csv("files/output/train_dataset.csv", index=False)
+    df_test.to_csv("files/output/test_dataset.csv", index=False)
 
 pregunta_01()
